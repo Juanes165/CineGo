@@ -54,11 +54,20 @@ def register_user():
         )
         new_user.set_password(data.get('password'))
         new_user.save()
-
-        return jsonify({'message': 'User created succesfully'}), 201
     
     except Exception as e:
-        return jsonify({'message': str(e)}), 500
+        return jsonify({'message': 'Internal server error'}), 500
+    
+    access_token = create_access_token(identity=new_user.email)
+    refresh_token = create_refresh_token(identity=new_user.email)
+
+    return jsonify(
+        {
+            'message': 'User created succesfully',
+            'access_token': access_token,
+            'refresh_token': refresh_token
+        }
+    ), 201
     
 
 
