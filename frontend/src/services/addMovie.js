@@ -2,14 +2,13 @@ import axios from "axios";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-export default function signUp(data) {
-    
-    return axios.post(`${API_URL}/auth/register`,
-        data,
+export default function addMovie (formData) {
+
+    return axios.post(`${API_URL}/movies`,
+        formData,
         {
             headers: {
                 "Content-Type": "multipart/form-data",
-                "Access-Control-Allow-Origin": "*",
             },
         })
         .then((response) => response.data)
@@ -18,12 +17,10 @@ export default function signUp(data) {
                 // The request was made and the server responded with a status code
                 // that falls out of the range of 2xx
                 switch (error.response.status) {
-                    case 400:
-                        throw new Error("Completa todos los campos");
-                    case 409:
-                        throw new Error("El correo electrónico ya está en uso");
+                    case 401:
+                        throw new Error("No autorizado");
                     case 500:
-                        throw new Error("Algo salió mal, intenta de nuevo más tarde");
+                        throw new Error("Error del servidor, intenta de nuevo más tarde");
                     default:
                         throw new Error("Algo salió mal, intenta de nuevo más tarde");
                 }
@@ -31,7 +28,7 @@ export default function signUp(data) {
             } else if (error.request) {
                 // The request was made but no response was received
                 console.error(error.request);
-                throw new Error("Algo salió mal, intenta de nuevo más tarde");
+                throw new Error("Error de petición");
 
             } else {
                 // Something happened in setting up the request that triggered an Error
@@ -39,4 +36,4 @@ export default function signUp(data) {
                 throw new Error("Ocurrió un error, por favor intenta de nuevo");
             }
         })
-};
+}

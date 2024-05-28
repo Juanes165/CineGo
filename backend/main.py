@@ -2,8 +2,11 @@ from flask import Flask
 from flask_cors import CORS
 from extensions import db, jwt
 from src.routes import Auth, Movies
+from dotenv import load_dotenv
 
 def create_app():
+
+    load_dotenv()
 
     app = Flask(__name__)
     CORS(app, origins='*')

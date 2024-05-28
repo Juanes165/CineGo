@@ -4,7 +4,9 @@ class Movie(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String(), nullable=False)
+    description = db.Column(db.Text(), nullable=False)
     duration = db.Column(db.Integer, nullable=False)
+    price = db.Column(db.Float(), nullable=False)
     genre = db.Column(db.String(), nullable=False)
     image_url = db.Column(db.String())
     is_active = db.Column(db.Boolean, default=True)

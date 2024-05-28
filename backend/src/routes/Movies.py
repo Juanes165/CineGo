@@ -1,5 +1,9 @@
 from flask import Blueprint, jsonify, request
 from src.models.Movie import Movie
+from src.services.StorageService import StorageService
+import time
+import tempfile
+import os
 
 movies_bp = Blueprint('movies', __name__)
 
@@ -14,17 +18,21 @@ def create_movie():
     requestBody:
         required: true
         content:
-            application/json:
+            multipart/form-data:
             schema:
                 type: object
                 properties:
                 title:
                     type: string
+                description:
+                    type: string
                 duration:
                     type: integer
+                price:
+                    type: number
                 genre:
                     type: string
-                image_url:
+                image:
                     type: string
     
     responses:
@@ -35,20 +43,37 @@ def create_movie():
         500:
             description: Internal server error
     """
-    data = request.get_json()
+    title = request.form.get('title')
+    description = request.form.get('description')
+    duration = request.form.get('duration')
+    price = request.form.get('price')
+    genre = request.form.get('genre')
+    image = request.files.get('image')
 
     # Validate the data
-    if not data.get('title') or not data.get('duration') or not data.get('genre'):
+    if not title or not description or not duration or not price or not genre or not image:
         return jsonify({'message': 'All fields are required'}), 400
+    
+    # File name in storage, format title_date_time.extension
+    # e.g. 'the_godfather_2021_09_01_at_12_00_00.jpg'
+    file_title = title.replace(' ', '_').lower()
+    date_time = time.strftime("%Y_%m_%d_at_%H_%M_%S")
+    extension = image.content_type.split('/')[1]
+    filename = f"{file_title}_{date_time}.{extension}"
+
+    image_url = StorageService.upload_file(image, filename)
 
     try:
         new_movie = Movie(
-            title=data.get('title'),
-            duration=data.get('duration'),
-            genre=data.get('genre'),
-            image_url=data.get('image_url')
+            title=title,
+            description=description,
+            duration=duration,
+            price=price,
+            genre=genre,
+            image_url=image_url
         )
         new_movie.save()
+        
     except Exception as e:
         return jsonify({'message': str(e)}), 500
 

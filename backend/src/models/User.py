@@ -12,6 +12,7 @@ class User(db.Model):
     phone = db.Column(db.String(15), nullable=False)
     password = db.Column(db.Text())
     is_admin = db.Column(db.Boolean, default=False)
+    is_active = db.Column(db.Boolean, default=True)
 
 
     def __repr__(self):
