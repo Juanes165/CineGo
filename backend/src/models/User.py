@@ -1,21 +1,21 @@
 from extensions import db
-from uuid import uuid4
 from werkzeug.security import generate_password_hash, check_password_hash
 
 # User model
 class User(db.Model):
     __tablename__ = 'users'
 
-    id = db.Column(db.String(), primary_key=True, default=str(uuid4()))
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     email = db.Column(db.String(), nullable=False)
     name = db.Column(db.String(), nullable=False)
     last_name = db.Column(db.String(), nullable=False)
     phone = db.Column(db.String(15), nullable=False)
     password = db.Column(db.Text())
+    is_admin = db.Column(db.Boolean, default=False)
 
 
     def __repr__(self):
-        return f'<User {self.email}>'
+        return f'<User {self.email} {self.name} {self.last_name} {self.phone} {str(self.id)} {str(self.is_admin)}>'
     
 
     def set_password(self, password):

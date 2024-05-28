@@ -1,10 +1,12 @@
 from flask import Flask
+from flask_cors import CORS
 from extensions import db, jwt
-from auth import auth_bp
+from src.routes import Auth, Movies
 
 def create_app():
 
     app = Flask(__name__)
+    CORS(app, origins='*')
 
     app.config.from_prefixed_env()
 
@@ -13,6 +15,7 @@ def create_app():
     jwt.init_app(app)
 
     # Register auth blueprint
-    app.register_blueprint(auth_bp, url_prefix='/auth')
+    app.register_blueprint(Auth.auth_bp, url_prefix='/auth')
+    app.register_blueprint(Movies.movies_bp, url_prefix='/movies')
 
     return app

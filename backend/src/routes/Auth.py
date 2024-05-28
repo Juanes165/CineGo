@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import create_access_token, create_refresh_token
-from models import User
+from src.models.User import User
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -45,6 +45,10 @@ def register_user():
     if user:
         return jsonify({'message': 'User already exists'}), 409
     
+    # Validate the data
+    if not data.get('email') or not data.get('name') or not data.get('last_name') or not data.get('phone') or not data.get('password'):
+        return jsonify({'message': 'All fields are required'}), 400
+    
     try:
         new_user = User(
             email=data.get('email'),
@@ -54,12 +58,20 @@ def register_user():
         )
         new_user.set_password(data.get('password'))
         new_user.save()
-
-        return jsonify({'message': 'User created succesfully'}), 201
     
     except Exception as e:
-        return jsonify({'message': str(e)}), 500
+        return jsonify({'message': 'Internal server error'}), 500
     
+    access_token = create_access_token(identity=new_user.id)
+    #refresh_token = create_refresh_token(identity=new_user.id)
+
+    return jsonify(
+        {
+            'message': 'User created succesfully',
+            'token': access_token,
+            #'refresh_token': refresh_token
+        }
+    ), 201
 
 
 @auth_bp.post('/login')
@@ -74,13 +86,13 @@ def login_user():
     if not user or not user.check_password(data.get('password')):
         return jsonify({'message': 'Invalid email or password'}), 401
     
-    access_token = create_access_token(identity=user.email)
-    refresh_token = create_refresh_token(identity=user.email)
+    access_token = create_access_token(identity=user.id)
+    #refresh_token = create_refresh_token(identity=user.id)
 
     return jsonify(
         {
             'message': 'Logged In Succesfully',
-            'access_token': access_token,
-            'refresh_token': refresh_token
+            'token': access_token,
+            #'refresh_token': refresh_token
         }
     ), 200
