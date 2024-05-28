@@ -15,7 +15,7 @@ class User(db.Model):
 
 
     def __repr__(self):
-        return f'<User {self.email + self.name + self.last_name + self.phone + " " + str(self.id) + str(self.is_admin)}>'
+        return f'<User {self.email} {self.name} {self.last_name} {self.phone} {str(self.id)} {str(self.is_admin)}>'
     
 
     def set_password(self, password):

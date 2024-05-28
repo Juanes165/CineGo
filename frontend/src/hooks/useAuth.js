@@ -10,14 +10,12 @@ export const useAuth = () => {
     const signIn = useCallback(async (email, password) => {
         setStatus({ loading: true, error: null });
         try {
-            const { access_token } = await signInService(email, password);
-            console.log(typeof window)
-            window.localStorage.setItem('token', access_token);
-            setToken(access_token);
+            const { token } = await signInService(email, password);
+            window.localStorage.setItem('token', token);
+            setToken(token);
             setStatus({ loading: false, error: null });
         } catch (error) {
             setStatus({ loading: false, error: error.message });
-            console.log(error)
         }
     }, [setToken]);
 
@@ -25,13 +23,12 @@ export const useAuth = () => {
     const signUp = useCallback(async (data) => {
         setStatus({ loading: true, error: null });
         try {
-            const { access_token } = await signUpService(data);
-            window.localStorage.setItem('token', access_token);
-            setToken(access_token);
+            const { token } = await signUpService(data);
+            window.localStorage.setItem('token', token);
+            setToken(token);
             setStatus({ loading: false, error: null });
         } catch (error) {
             setStatus({ loading: false, error: error.message });
-            console.log(error)
         }
     }, []);
 
@@ -45,7 +42,7 @@ export const useAuth = () => {
         user: {...user},
         isLogged: Boolean(token),
         isLoading: status.loading,
-        hasError: status.error,
+        error: status.error,
         signIn,
         signUp,
         signOut,

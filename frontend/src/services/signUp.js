@@ -6,7 +6,29 @@ export default function signUp (data) {
     return axios.post(`${API_URL}/auth/register`, data)
         .then((response) => response.data)
         .catch((error) => {
-            console.error(error.response.data);
-            return Promise.reject(error.response.data);
+            if (error.response) {
+                // The request was made and the server responded with a status code
+                // that falls out of the range of 2xx
+                switch (error.response.status) {
+                    case 400:
+                        throw new Error("Completa todos los campos");
+                    case 409:
+                        throw new Error("El correo electrónico ya está en uso");
+                    case 500:
+                        throw new Error("Algo salió mal, intenta de nuevo más tarde");
+                    default:
+                        throw new Error("Algo salió mal, intenta de nuevo más tarde");
+                }
+
+            } else if (error.request) {
+                // The request was made but no response was received
+                console.error(error.request);
+                throw new Error("Algo salió mal, intenta de nuevo más tarde");
+
+            } else {
+                // Something happened in setting up the request that triggered an Error
+                console.error(error.message);
+                throw new Error("Ocurrió un error, por favor intenta de nuevo");
+            }
         })
 };
