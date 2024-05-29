@@ -9,7 +9,6 @@ export default function signIn(data) {
         {
             headers: {
                 "Content-Type": "application/json",
-                "Access-Control-Allow-Origin": "*",
             },
         })
         .then((response) => response.data)
@@ -20,6 +19,8 @@ export default function signIn(data) {
                 switch (error.response.status) {
                     case 401:
                         throw new Error("Correo o contraseña incorrectos");
+                    case 403:
+                        throw new Error("Tu cuenta ha sido deshabilitada, contacta a soporte para más información");
                     case 500:
                         throw new Error("Algo salió mal, intenta de nuevo más tarde");
                     default:

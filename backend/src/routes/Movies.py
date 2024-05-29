@@ -2,8 +2,6 @@ from flask import Blueprint, jsonify, request
 from src.models.Movie import Movie
 from src.services.StorageService import StorageService
 import time
-import tempfile
-import os
 
 movies_bp = Blueprint('movies', __name__)
 
@@ -80,10 +78,28 @@ def create_movie():
     return jsonify({ 'message': 'Movie added succesfully'}), 201
 
 
-@movies_bp.get('/')
+@movies_bp.get('/active')
 def get_movies():
     """
     Get all movies
+    ---
+    tags:
+      - movies
+
+    responses:
+        200:
+            description: A list of movies
+        500:
+            description: Internal server error
+    """
+    movies = Movie.query.filter_by(is_active=True).all()
+    return jsonify([movie.to_dict() for movie in movies])
+
+
+@movies_bp.get('/all')
+def get_all_movies():
+    """
+    Get all movies (including inactive)
     ---
     tags:
       - movies
@@ -127,10 +143,10 @@ def get_movie(id):
     return jsonify(movie.to_dict())
 
 
-@movies_bp.put('/<int:id>')
-def update_movie(id):
+@movies_bp.patch('/update/<int:id>')
+def change_movie_basic_info(id):
     """
-    Update a movie by id
+    Change basic info of a movie by id
     ---
     tags:
       - movies
@@ -151,11 +167,13 @@ def update_movie(id):
                 properties:
                 title:
                     type: string
+                description:
+                    type: string
                 duration:
                     type: integer
+                price:
+                    type: number
                 genre:
-                    type: string
-                image_url:
                     type: string
     
     responses:
@@ -168,32 +186,97 @@ def update_movie(id):
         500:
             description: Internal server error
     """
-    data = request.get_json()
-
     movie = Movie.query.get(id)
     if not movie:
         return jsonify({'message': 'Movie not found'}), 404
 
-    # Validate the data
-    if not data.get('title') or not data.get('duration') or not data.get('genre'):
+    data = request.get_json()
+    if not data:
         return jsonify({'message': 'All fields are required'}), 400
 
     try:
-        movie.title = data.get('title')
-        movie.duration = data.get('duration')
-        movie.genre = data.get('genre')
-        movie.image_url = data.get('image_url')
+        movie.title = data['title']
+        movie.description = data['description']
+        movie.duration = data['duration']
+        movie.price = data['price']
+        movie.genre = data['genre']
         movie.save()
     except Exception as e:
         return jsonify({'message': str(e)}), 500
-
+    
     return jsonify({ 'message': 'Movie updated succesfully'}), 200
 
 
-@movies_bp.patch('/<int:id>')
+@movies_bp.post('/update/image/<int:id>')
+def change_movie_image(id):
+    """
+    Change image of a movie by id
+    ---
+    tags:
+      - movies
+
+    parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+
+    requestBody:
+        required: true
+        content:
+            multipart/form-data:
+            schema:
+                type: object
+                properties:
+                image:
+                    type: string
+    
+    responses:
+        200:
+            description: Movie image updated succesfully
+        400:
+            description: Image is required
+        404:
+            description: Movie not found
+        500:
+            description: Internal server error
+    """
+    movie = Movie.query.get(id)
+    if not movie:
+        return jsonify({'message': 'Movie not found'}), 404
+
+    image = request.files.get('image')
+    if not image:
+        return jsonify({'message': 'Image is required'}), 400
+
+    # get the current url to delete the old image from storage
+    # cut the url after .com
+    current_image = movie.image_url.split('.com/')[-1]
+
+    # File name in storage, format title_date_time.extension
+    # e.g. 'the_godfather_2021_09_01_at_12_00_00.jpg'
+    file_title = movie.title.replace(' ', '_').lower()
+    date_time = time.strftime("%Y_%m_%d_at_%H_%M_%S")
+    extension = image.content_type.split('/')[1]
+    filename = f"{file_title}_{date_time}.{extension}"
+
+    image_url = StorageService.upload_file(image, filename)
+    StorageService.delete_file(current_image)
+
+    try:
+        movie.image_url = image_url
+        movie.save()
+    except Exception as e:
+        return jsonify({'message': str(e)}), 500
+    
+    return jsonify({ 'message': 'Movie image updated succesfully', 'image_url': image_url}), 200
+
+
+@movies_bp.patch('/toggle/<int:id>')
 def toggle_movie(id):
     """
-    Toggle a movie by id
+    Deactivate a movie by id
     ---
     tags:
       - movies
@@ -216,9 +299,13 @@ def toggle_movie(id):
     movie = Movie.query.get(id)
     if not movie:
         return jsonify({'message': 'Movie not found'}), 404
-
-    movie.is_active = not movie.is_active
-    movie.save()
+    
+    try:
+        movie.is_active = not movie.is_active
+        movie.save()
+    except Exception as e:
+        return jsonify({'message': str(e)}), 500
+    
     return jsonify({ 'message': 'Movie toggled succesfully'}), 200
 
 

@@ -8,8 +8,7 @@ export default function signUp(data) {
         data,
         {
             headers: {
-                "Content-Type": "multipart/form-data",
-                "Access-Control-Allow-Origin": "*",
+                "Content-Type": "application/json",
             },
         })
         .then((response) => response.data)

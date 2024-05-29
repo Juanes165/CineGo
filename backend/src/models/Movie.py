@@ -36,7 +36,9 @@ class Movie(db.Model):
         return {
             'id': self.id,
             'title': self.title,
+            'description': self.description,
             'duration': self.duration,
+            'price': self.price,
             'genre': self.genre,
             'image_url': self.image_url,
             'is_active': self.is_active

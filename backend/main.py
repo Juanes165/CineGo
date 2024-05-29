@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_cors import CORS
 from extensions import db, jwt
-from src.routes import Auth, Movies
+from src.routes import Auth, Movies, Users
 from dotenv import load_dotenv
 
 def create_app():
@@ -20,5 +20,6 @@ def create_app():
     # Register auth blueprint
     app.register_blueprint(Auth.auth_bp, url_prefix='/auth')
     app.register_blueprint(Movies.movies_bp, url_prefix='/movies')
+    app.register_blueprint(Users.user_bp, url_prefix='/users')
 
     return app

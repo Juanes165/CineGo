@@ -79,7 +79,7 @@ export default function SignInPage() {
 
             {/* redirect to sign up */}
             <span className='block text-center font-light mb-16 sm:mb-0'>¿No tienes cuenta?&nbsp;
-                <Link href="/signup" className='text-red-500 font-semibold relative
+                <Link href="/registro" className='text-red-500 font-semibold relative
                     transition-all ease-in-out before:transition-[width] before:ease-in-out before:duration-300 before:absolute before:bg-red-500 before:origin-center before:h-[2px] before:w-0 hover:before:w-[50%] before:-bottom-1 before:left-[50%]
                     after:transition-[width] after:ease-in-out after:duration-300 after:absolute after:bg-red-500 after:origin-center after:h-[2px] after:w-0 hover:after:w-[50%] after:-bottom-1 after:right-[50%]'>
                     Regístrate

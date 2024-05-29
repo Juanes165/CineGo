@@ -1,10 +1,8 @@
-import axios from "axios";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+import axiosInstance from "@/utils/interceptor";
 
 export default function addMovie (formData) {
 
-    return axios.post(`${API_URL}/movies`,
+    return axiosInstance.post("/movies",
         formData,
         {
             headers: {
@@ -17,6 +15,8 @@ export default function addMovie (formData) {
                 // The request was made and the server responded with a status code
                 // that falls out of the range of 2xx
                 switch (error.response.status) {
+                    case 400:
+                        throw new Error("Completa todos los campos");
                     case 401:
                         throw new Error("No autorizado");
                     case 500:

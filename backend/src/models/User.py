@@ -56,6 +56,24 @@ class User(db.Model):
         return cls.query.filter_by(email=email).first()
     
 
+    def to_dict(self):
+        '''
+        Convert the user to a dictionary
+
+        Returns:
+            dict: The user as a dictionary
+        '''
+        return {
+            'id': self.id,
+            'email': self.email,
+            'name': self.name,
+            'last_name': self.last_name,
+            'phone': self.phone,
+            'is_admin': self.is_admin,
+            'is_active': self.is_active
+        }
+    
+
     def save(self):
         '''
         Save the user in the database

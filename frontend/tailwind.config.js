@@ -1,3 +1,5 @@
+const { transform } = require('next/dist/build/swc');
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -7,11 +9,19 @@ module.exports = {
   ],
   theme: {
     extend: {
-      backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+      animation: {
+        "show-modal": "show-modal 100ms linear",
       },
+      keyframes: {
+        'show-modal': {
+          '0%': {
+            'transform': 'translateY(50vh)',
+          },
+          '100%': {
+            'transform': 'translateY(0px)',
+          },
+        }
+      }
     },
   },
   plugins: [],
