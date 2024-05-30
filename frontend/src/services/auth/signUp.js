@@ -2,8 +2,15 @@ import axios from "axios";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-export default function signUp (data) {
-    return axios.post(`${API_URL}/auth/register`, data)
+export default function signUp(data) {
+    
+    return axios.post(`${API_URL}/auth/register`,
+        data,
+        {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
         .then((response) => response.data)
         .catch((error) => {
             if (error.response) {

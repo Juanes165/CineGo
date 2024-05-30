@@ -12,6 +12,7 @@ class User(db.Model):
     phone = db.Column(db.String(15), nullable=False)
     password = db.Column(db.Text())
     is_admin = db.Column(db.Boolean, default=False)
+    is_active = db.Column(db.Boolean, default=True)
 
 
     def __repr__(self):
@@ -53,6 +54,24 @@ class User(db.Model):
             User: The user with the given email
         '''
         return cls.query.filter_by(email=email).first()
+    
+
+    def to_dict(self):
+        '''
+        Convert the user to a dictionary
+
+        Returns:
+            dict: The user as a dictionary
+        '''
+        return {
+            'id': self.id,
+            'email': self.email,
+            'name': self.name,
+            'last_name': self.last_name,
+            'phone': self.phone,
+            'is_admin': self.is_admin,
+            'is_active': self.is_active
+        }
     
 
     def save(self):
