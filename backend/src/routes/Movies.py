@@ -78,7 +78,7 @@ def create_movie():
     return jsonify({ 'message': 'Movie added succesfully'}), 201
 
 
-@movies_bp.get('/active')
+@movies_bp.get('/search/')
 def get_movies():
     """
     Get all movies
@@ -93,6 +93,32 @@ def get_movies():
             description: Internal server error
     """
     movies = Movie.query.filter_by(is_active=True).all()
+    return jsonify([movie.to_dict() for movie in movies])
+
+
+@movies_bp.get('/search/<string:query>')
+def search_movies(query):
+    """
+    Search movies by title
+    ---
+    tags:
+      - movies
+
+    parameters:
+        - in: path
+          name: query
+          required: true
+          schema:
+            type: string
+
+    responses:
+        200:
+            description: A list of movies
+        500:
+            description: Internal server error
+    """
+    
+    movies = Movie.query.filter(Movie.title.ilike(f'%{query}%')).filter(Movie.is_active==True).all()
     return jsonify([movie.to_dict() for movie in movies])
 
 

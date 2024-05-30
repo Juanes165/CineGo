@@ -252,7 +252,7 @@ export default function MoviePage({ params }) {
                                     className="hidden"
                                     onChange={handleImageChange}
                                 />
-                                <label htmlFor="image" className="text-red-500 border py-2 px-4 rounded-lg cursor-pointer">Cambiar imagen</label>
+                                <label htmlFor="image" className="text-red-500 dark:text-white border py-2 px-4 rounded-lg cursor-pointer">Cambiar imagen</label>
                             </>
                         )}
                     </div>

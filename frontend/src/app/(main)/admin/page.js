@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { AdminMovieCard } from '@/components';
+import { MovieCard } from '@/components';
 import { getAllMoviesService } from '@/services';
 import Link from 'next/link';
 
@@ -21,7 +21,7 @@ export default function AdminPage() {
             <div className="flex justify-center flex-wrap px-4 gap-6">
                 {allMovies.map((movie, index) => (
                     <Link href={`/admin/peliculas/${movie.id}`} key={index}>
-                        <AdminMovieCard movie={movie} />
+                        <MovieCard movie={movie} />
                     </Link>
                 ))}
             </div>

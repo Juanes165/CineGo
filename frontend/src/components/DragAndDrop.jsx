@@ -24,24 +24,23 @@ export default function DragAndDrop({ file, setFile }) {
         setDragging(false);
     };
 
+    console.log(dragging)
+
     return (
-        <section className="bg-amethyst/10 dark:bg-wisteria/20 rounded-lg">
+        <section className="bg-gray-100 dark:bg-gray-700 rounded-lg">
             <div
                 onDrop={handleDrop}
                 onDragOver={(event) => event.preventDefault()}
                 onDragEnter={() => setDragging(true)}
                 onDragLeave={() => setDragging(false)}
                 className={`flex flex-col items-center justify-center relative rounded-lg p-4
-                border-4 border-dashed border-amethyst dark:border-grape transition-all duration-150
-                ${dragging ? "bg-amethyst/20 dark:bg-wisteria/5" : "bg-transparent"}`}
+                border-2 border-dashed border-gray-900/25 dark:border-white/25 transition-all duration-150
+                ${dragging ? "bg-gray-900/20 dark:bg-white/5" : "bg-transparent"}`}
             >
                 <div>
-                    <div className="upload-info flex flex-col items-center text-center mb-4">
-                        <UploadIcon className={`w-28 h-28 text-amethyst ${dragging ? "animate-float" : ""}`} />
-                        <p className="text-2xl mb-2 font-bold">Arrastra tus archivos aquí</p>
-                        <p className="text-lg text-balance">
-                            <span className="font-semibold">Formatos soportados: </span>.PDF, .PNG, .JPG, .JPEG
-                        </p>
+                    <div className="upload-info flex flex-col items-center text-center mb-1">
+                        <UploadIcon className={`w-28 h-28 text-red-500 ${dragging ? "animate-float" : ""}`} />
+                        <p className="text-2xl font-bold">Arrastra tu imagen aquí</p>
                     </div>
                     <input
                         type="file"
@@ -50,15 +49,19 @@ export default function DragAndDrop({ file, setFile }) {
                         onChange={handleFileChange}
                         accept=".png, .jpg, .jpeg, .svg"
                     />
+                    <p className="text-center">- O -</p>
                     <label
                         htmlFor="browse"
-                        className="flex items-center justify-center py-2 px-4 rounded-lg 
-                                cursor-pointer text-lg font-semibold text-main-light
-                                bg-amethyst hover:bg-grape
-                                transition-all duration-200"
+                        className="flex items-center justify-center rounded-lg 
+                                cursor-pointer text-xl font-semibold transition-all mb-4 text-red-500 ease-in-out relative
+                                before:transition-[width] before:ease-in-out before:duration-300 before:absolute before:bg-red-500 before:origin-center before:h-[2px] before:w-0 hover:before:w-[35%] before:-bottom-1 before:left-[50%]
+                                after:transition-[width] after:ease-in-out after:duration-300 after:absolute after:bg-red-500 after:origin-center after:h-[2px] after:w-0 hover:after:w-[35%] after:-bottom-1 after:right-[50%]"
                     >
-                        Seleccionar archivos
+                        Selecciona de tu dispositivo
                     </label>
+                    <p className="text-lg text-balance">
+                            <span className="font-semibold">Formatos soportados: </span>.PDF, .PNG, .JPG, .JPEG
+                    </p>
                 </div>
             </div>
         </section>

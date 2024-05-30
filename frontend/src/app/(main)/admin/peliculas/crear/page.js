@@ -1,7 +1,8 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { TextInput, MultilineTextInput, DragAndDrop } from '@/components';
+import { TextInput, MultilineTextInput, DragAndDrop, MovieCard } from '@/components';
 import { addMovieService } from '@/services';
+import { CancelIcon } from '@/utils/icons';
 
 export default function CreateMoviePage() {
 
@@ -41,11 +42,9 @@ export default function CreateMoviePage() {
 
 
     return (
-        <main className="px-8 sm:px-16 py-8 xl:min-w-[40%] sm:shadow-gray-500 rounded-3xl bg-white dark:bg-gray-900">
-            <p className='text-[56px] font-bold text-center mb-10'>Cine<span className='text-red-500'>Go</span></p>
-            <h1 className="text-4xl font-bold mb-6">Añadir película</h1>
-            <form className='mb-8' onSubmit={handleSubmit}>
-
+        <main className="flex gap-4 px-8 sm:px-16 py-8 xl:min-w-[40%] sm:shadow-gray-500 rounded-3xl bg-white dark:bg-gray-900">
+            <section className="w-full md:w-1/2">
+                <h1 className="text-4xl font-bold mb-6">Añadir película</h1>
                 {/* Title */}
                 <label htmlFor="title" className="block mb-2 font-medium">Título</label>
                 <TextInput
@@ -69,29 +68,36 @@ export default function CreateMoviePage() {
                     className={` mb-4`}
                 />
 
-                {/* Duration */}
-                <label htmlFor="duration" className="block mb-2 font-medium">Duración</label>
-                <TextInput
-                    type="number"
-                    id="duration"
-                    name="duration"
-                    placeholder='Duración'
-                    value={movie.duration}
-                    onChange={handleMovieChange}
-                    className={` mb-4`}
-                />
+                <div className='grid grid-cols-2 gap-4'>
+                    {/* Duration */}
+                    <div className='col-span-1'>
+                        <label htmlFor="duration" className="block mb-2 font-medium">Duración</label>
+                        <TextInput
+                            type="number"
+                            id="duration"
+                            name="duration"
+                            placeholder='Duración'
+                            value={movie.duration}
+                            onChange={handleMovieChange}
+                            className={` mb-4`}
+                        />
+                    </div>
 
-                {/* Duration */}
-                <label htmlFor="price" className="block mb-2 font-medium">Precio</label>
-                <TextInput
-                    type="number"
-                    id="price"
-                    name="price"
-                    placeholder='Precio de la boleta'
-                    value={movie.price}
-                    onChange={handleMovieChange}
-                    className={` mb-4`}
-                />
+                    {/* Price */}
+                    <div className='col-span-1'>
+                        <label htmlFor="price" className="block mb-2 font-medium">Precio</label>
+                        <TextInput
+                            type="number"
+                            id="price"
+                            name="price"
+                            placeholder='Precio de la boleta'
+                            value={movie.price}
+                            onChange={handleMovieChange}
+                            className={` mb-4`}
+                        />
+                    </div>
+
+                </div>
 
                 {/* Genre */}
                 <label htmlFor="genre" className="block mb-2 font-medium">Género</label>
@@ -109,34 +115,31 @@ export default function CreateMoviePage() {
 
                 {/* Image */}
                 <DragAndDrop file={file} setFile={setFile} />
+            </section>
 
-                {file && (
-                    <div className="flex flex-row gap-5 w-full h-full mb-2">
-                            <div className="flex flex-col justify-between items-center p-4 border rounded-lg h-40 w-40 relative">
-                                {/* {returnIcon(file.type)} */}
-                                <div className='w-32'>
-                                    <p className='truncate'>{file.name}</p>
-                                </div>
-                                <div className="cursor-pointer absolute -top-4 -right-4 ">
-                                    {/* <CancelIcon className="h-8 w-8 text-red-500" onClick={() => handleRemoveFile()} >X</CancelIcon> */}
-                                    X
-                                </div>
-                            </div>
+            <section className="w-full md:w-1/2 mb-8 flex flex-col items-center py-16">
+                <h1 className="text-3xl mb-2">Vista previa</h1>
+                <div className='relative mb-8'>
+                    <MovieCard movie={{ ...movie, genre: selectedGenre, image_url: file ? URL.createObjectURL(file) : '/samplePoster.png' }} />
 
-                    </div>
-                )}
+                    {file && (
+                        <div className="absolute -top-4 -right-4 z-10">
+                            <CancelIcon onClick={handleRemoveFile} className='h-8 w-8 cursor-pointer text-red-500' />
+                        </div>
+                    )}
+                </div>
 
                 {/* Submit */}
                 <button
-                    type="submit"
+                    type="button"
+                    onClick={handleSubmit}
                     // disabled={isLoading}
-                    className={`w-full flex items-center justify-center px-4 py-2.5 mb-2 text-white text-lg font-semibold rounded-lg
-                            bg-red-500 hover:bg-red-600 disabled:bg-red-400 transition-all duration-300`}
+                    className={`w-full md:w-1/2 flex items-center justify-center px-4 py-2.5 mb-2 text-white text-lg font-semibold rounded-lg
+                                bg-red-500 hover:bg-red-600 disabled:bg-red-400 transition-all duration-300`}
                 >
-                    {/* <LoadingIcon className={`h-6 w-6 mr-2 animate-spin ${isLoading ? '' : 'hidden'}`} /> */}
                     <span>Añadir película</span>
                 </button>
-            </form>
+            </section>
         </main>
     );
 }

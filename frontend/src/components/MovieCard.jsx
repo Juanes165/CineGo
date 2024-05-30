@@ -1,4 +1,4 @@
-export default function AdminMovieCard({ movie }) {
+export default function MovieCard({ movie }) {
     return (
         <div className="w-72 h-fit bg-white dark:bg-gray-800 rounded-lg group
         shadow-xl hover:shadow-2xl shadow-gray-900/15 hover:shadow-gray-900/35 dark:shadow-white/15 dark:hover:shadow-white/15 transition-all duration-200">
