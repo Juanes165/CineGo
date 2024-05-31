@@ -74,6 +74,7 @@ def register_user():
     )
     response.status_code = 201
     response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
 
 
 @auth_bp.post('/login')
@@ -103,6 +104,7 @@ def login_user():
     )
     response.status_code = 200
     response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
 
 
 @auth_bp.post('/admin/register')
@@ -172,3 +174,4 @@ def register_user_admin():
     )
     response.status_code = 201
     response.headers.add('Access-Control-Allow-Origin', '*')
+    return response

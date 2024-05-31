@@ -23,8 +23,6 @@ export default function SignInPage() {
         setUser({ ...user, [e.target.name]: e.target.value });
     }
 
-    console.log(isLogged, isAdmin);
-
     if (isAdmin) {
         return redirect('/admin');
     }
