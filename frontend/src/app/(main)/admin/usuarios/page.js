@@ -5,7 +5,7 @@ import { getUsersService } from "@/services";
 import { phoneParse } from "@/utils/phoneParse";
 import { toggleActiveUserService } from "@/services";
 
-export default function usersPage(){
+export default function UsersPage(){
 
     const [users, setUsers] = useState([]);
     const [currentUser, setCurrentUser] = useState(0);
