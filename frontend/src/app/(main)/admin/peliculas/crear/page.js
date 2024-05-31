@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { TextInput, MultilineTextInput, DragAndDrop, MovieCard } from '@/components';
+import { TextInput, MultilineTextInput, DragAndDrop, MovieCard, ToastSuccess } from '@/components';
 import { addMovieService } from '@/services';
 import { CancelIcon } from '@/utils/icons';
 
@@ -11,6 +11,8 @@ export default function CreateMoviePage() {
 
     const [selectedGenre, setSelectedGenre] = useState('Acción');
     const [genres, setGenres] = useState([]);
+
+    const [showSuccessToast, setShowSuccessToast] = useState(false);
 
     useEffect(() => {
         // Fetch genres
@@ -26,7 +28,14 @@ export default function CreateMoviePage() {
         formData.append('genre', selectedGenre);
         formData.append('image', file);
 
-        await addMovieService(formData);
+        await addMovieService(formData)
+        .then(async () => {
+            setMovie({ title: '', description: '', duration: '', price: '' });
+            setFile(null)
+            setShowSuccessToast(true);
+            await new Promise(resolve => setTimeout(resolve, 5000));
+            setShowSuccessToast(false);
+        })
     }
 
     const handleMovieChange = (e) => {
@@ -42,7 +51,7 @@ export default function CreateMoviePage() {
 
 
     return (
-        <main className="flex gap-4 px-8 sm:px-16 py-8 xl:min-w-[40%] sm:shadow-gray-500 rounded-3xl bg-white dark:bg-gray-900">
+        <main className="flex relative gap-4 px-8 sm:px-16 py-8 xl:min-w-[40%] sm:shadow-gray-500 rounded-3xl bg-white dark:bg-gray-900">
             <section className="w-full md:w-1/2">
                 <h1 className="text-4xl font-bold mb-6">Añadir película</h1>
                 {/* Title */}
@@ -140,6 +149,10 @@ export default function CreateMoviePage() {
                     <span>Añadir película</span>
                 </button>
             </section>
+            {/* Toast */}
+            <div className='absolute right-5'>
+            {showSuccessToast && <ToastSuccess message={'Película creada con éxito'} />}
+            </div>
         </main>
     );
 }

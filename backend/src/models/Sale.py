@@ -9,6 +9,8 @@ class Sale(db.Model):
     ticket_quantity = db.Column(db.Integer, nullable=False)
     total_price = db.Column(db.Float(), nullable=False)
     created_at = db.Column(db.DateTime(), nullable=False, default=db.func.current_timestamp())
+    payment_method = db.Column(db.String(), nullable=False)
+    state = db.Column(db.String(), nullable=False, default='pending')
 
     def __repr__(self):
         return f'<Sale {str(self.id)} {str(self.user_id)} {str(self.movie_id)} {str(self.purchase_date)} {str(self.is_active)}>'
@@ -33,8 +35,9 @@ class Sale(db.Model):
     def to_dict(self):
         return {
             'id': self.id,
-            'user_id': self.user_id,
-            'movie_id': self.movie_id,
-            'purchase_date': self.purchase_date,
-            'is_active': self.is_active
+            'ticket_quantity': self.ticket_quantity,
+            'total_price': self.total_price,
+            'created_at': self.created_at,
+            'payment_method': self.payment_method,
+            'state': self.state
         }

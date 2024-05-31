@@ -5,22 +5,14 @@ import { useAuth } from '@/hooks/useAuth';
 import { getMovieByIdService } from '@/services';
 import { priceParse } from '@/utils/priceParse';
 import { PlusIcon, MinusIcon } from '@/utils/icons';
+import { SaleSummaryModal } from '@/components';
 
 export default function MoviePage({ params }) {
 
     const [movie, setMovie] = useState(null);
     const [tickets, setTickets] = useState(1);
 
-    // const movie = {
-    //     "description": "Una película muy buena",
-    //     "duration": 92,
-    //     "genre": "Comedia",
-    //     "id": 5,
-    //     "image_url": "https://storage.googleapis.com/cinego-4b93e.appspot.com/images/kung_fu_panda_2_2024_05_29_at_02_30_40.jpeg",
-    //     "is_active": true,
-    //     "price": 6000,
-    //     "title": "Kung Fu Panda 2"
-    //   }
+    const [isOpen, setIsOpen] = useState(false);
 
     const { isLogged } = useAuth();
 
@@ -30,6 +22,18 @@ export default function MoviePage({ params }) {
             .then(data => setMovie(data))
             .catch(error => console.error(error));
     }, []);
+
+    const handleChange = (e) => {
+        if (e.target.value < 1) {
+            setTickets(1);
+        }
+        else if (e.target.value > 99) {
+            setTickets(99);
+        }
+        else {
+            setTickets(e.target.value);
+        }
+    }
 
     const handlePlus = () => {
         setTickets(tickets + 1);
@@ -78,7 +82,8 @@ export default function MoviePage({ params }) {
                                 <input 
                                 type='number' 
                                 value={tickets}
-                                className='text-2xl text-gray-900 font-semibold py-2 px-3 h-12 w-14 outline-none' />
+                                onChange={handleChange}
+                                className='text-2xl text-gray-900 text-center font-semibold py-2 px-3 h-12 w-14 outline-none' />
                                 <button
                                     onClick={handlePlus}
                                     className='px-2'
@@ -86,7 +91,9 @@ export default function MoviePage({ params }) {
                                     <PlusIcon className='w-6 h-6'/>
                                 </button>
                                 </div>
-                            <button className='w-1/2 bg-balance text-lg text-white bg-red-500 font-semibold py-2.5 px-4 rounded-lg'>Comprar</button>
+                            <button 
+                                onClick={() => setIsOpen(true)}
+                            className='w-1/2 bg-balance text-lg text-white bg-red-500 font-semibold py-2.5 px-4 rounded-lg'>Comprar</button>
                         </div>
                     ) : (
                         <Link
@@ -100,8 +107,7 @@ export default function MoviePage({ params }) {
                     )}
                 </div>
             </section>
-
-
+            <SaleSummaryModal isOpen={isOpen} onClose={() => setIsOpen(false)} movie={movie} tickets={tickets} />
         </main>
     );
 }

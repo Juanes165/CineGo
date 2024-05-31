@@ -11,7 +11,7 @@ export default function SignInPage() {
     const [user, setUser] = useState({ email: '', password: '' });
     const [showPassword, setShowPassword] = useState(false);
 
-    const { signIn, isLogged, isLoading, error } = useAuth();
+    const { signIn, isLogged, isLoading, error, isAdmin } = useAuth();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -23,9 +23,15 @@ export default function SignInPage() {
         setUser({ ...user, [e.target.name]: e.target.value });
     }
 
-    // if (isLogged) {
-    //     redirect('/');
-    // }
+    console.log(isLogged, isAdmin);
+
+    if (isAdmin) {
+        return redirect('/admin');
+    }
+
+    if (isLogged) {
+        return redirect('/inicio');
+    }
 
     return (
         <main className="px-8 sm:px-16 py-8 xl:min-w-[40%] sm:shadow-gray-500 rounded-3xl bg-white dark:bg-gray-900">

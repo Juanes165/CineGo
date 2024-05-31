@@ -85,11 +85,19 @@ def create_sale():
     """
     data = request.get_json()
 
+    payment_method = data.get('payment_method')
+    if payment_method == 'credit_card':
+        state = 'approved'
+    else:
+        state = 'pending'
+
     new_sale = Sale(
         user_id=data.get('user_id'),
         movie_id=data.get('movie_id'),
         ticket_quantity=data.get('ticket_quantity'),
-        total_price=data.get('total_price')
+        total_price=data.get('total_price'),
+        payment_method=data.get('payment_method'),
+        state=state
     )
 
     new_sale.save()
@@ -157,3 +165,56 @@ def get_movie_sales(id):
         return jsonify({'error': 'Movie not found'}), 404
 
     return jsonify([sale.to_dict() for sale in sales]), 200
+
+
+@sale_bp.put('/<int:id>/update')
+def update_sale(id):
+    """
+    Update a sale by id
+    ---
+    tags:
+      - sales
+
+    parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+
+    requestBody:
+        required: true
+        content:
+            application/json:
+            schema:
+                type: object
+                properties:
+                user_id:
+                    type: integer
+                movie_id:
+                    type: integer
+                ticket_quantity:
+                    type: integer
+                total_price:
+                    type: float
+
+    responses:
+        200:
+            description: Sale updated succesfully
+        404:
+            description: Sale not found
+        500:
+            description: Internal server error
+    """
+    data = request.get_json()
+
+    sale = Sale.query.get(id)
+
+    if not sale:
+        return jsonify({'error': 'Sale not found'}), 404
+
+    sale.state = data.get('state')
+
+    sale.save()
+
+    return jsonify(sale.to_dict()), 200

@@ -3,6 +3,15 @@ import axios from "axios";
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function signIn(data) {
+    /*
+     * function to sign in
+     *
+     * @param {Object} data
+     * @param {string} data.email
+     * @param {string} data.password
+     * @returns {Object} - Response data
+     * @throws {Error} - Error message
+     */
 
     return axios.post(`${API_URL}/auth/login`,
         data,

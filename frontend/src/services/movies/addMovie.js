@@ -1,7 +1,13 @@
 import axiosInstance from "@/utils/interceptor";
 
 export default function addMovie (formData) {
-
+    /*
+    * Function to add a movie
+    *
+    * @param {object} formData - Movie data
+    * @returns {object} - Response data
+    * @throws {Error} - Error message
+    */
     return axiosInstance.post("/movies",
         formData,
         {

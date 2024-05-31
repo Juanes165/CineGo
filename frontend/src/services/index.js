@@ -24,3 +24,8 @@ export { default as getUsersService } from "./users/getUsers.js";
 
 // Update
 export { default as toggleActiveUserService } from "./users/toggleActiveUser.js";
+
+
+// Sales services
+// Create
+export { default as createSaleService } from "./sales/createSale.js";
