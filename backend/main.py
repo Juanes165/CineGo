@@ -4,8 +4,6 @@ from extensions import db, jwt, getconn
 from src.routes import Auth, Movies, Users, Sales
 from dotenv import load_dotenv
 
-
-
 load_dotenv()
 
 app = Flask(__name__)

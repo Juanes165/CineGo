@@ -2,6 +2,9 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
 from google.cloud.sql.connector import Connector, IPTypes
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # load env vars
 db_user = os.environ["DB_USER"]
