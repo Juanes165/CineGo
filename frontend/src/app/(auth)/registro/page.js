@@ -11,7 +11,7 @@ export default function SignUpPage() {
     const [user, setUser] = useState({ name: '', last_name: '', phone: '', email: '', password: '', comfirm_password: '' });
     const [showPassword, setShowPassword] = useState(false);
 
-    const { signUp, isLogged, isLoading, error } = useAuth();
+    const { signUp, isLogged, isLoading, error, isAdmin } = useAuth();
 
     const handleChange = (e) => {
         setUser({ ...user, [e.target.name]: e.target.value });
@@ -23,9 +23,13 @@ export default function SignUpPage() {
         await signUp(user);
     }
 
-    // if (isLogged) {
-    //     redirect('/');
-    // }
+    if (isAdmin) {
+        return redirect('/admin');
+    }
+
+    if (isLogged) {
+        return redirect('/inicio');
+    }
 
     return (
         <main className="px-8 sm:px-16 py-8 xl:max-w-[60%] sm:shadow-gray-500 rounded-3xl bg-white dark:bg-gray-900">

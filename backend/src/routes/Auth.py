@@ -62,7 +62,7 @@ def register_user():
     except Exception as e:
         return jsonify({'message': 'Internal server error'}), 500
     
-    access_token = create_access_token(identity=new_user.id)
+    access_token = create_access_token(identity={ 'id': new_user.id, 'is_admin': new_user.is_admin })
     #refresh_token = create_refresh_token(identity=new_user.id)
 
     return jsonify(
@@ -89,7 +89,7 @@ def login_user():
     if not user.is_active:
         return jsonify({'message': 'User is not active'}), 403
     
-    access_token = create_access_token(identity=user.id)
+    access_token = create_access_token(identity={ 'id': user.id, 'is_admin': user.is_admin })
     #refresh_token = create_refresh_token(identity=user.id)
 
     return jsonify(
@@ -160,13 +160,9 @@ def register_user_admin():
     except Exception as e:
         return jsonify({'message': 'Internal server error'}), 500
     
-    access_token = create_access_token(identity=new_user.id)
-    #refresh_token = create_refresh_token(identity=new_user.id)
 
     return jsonify(
         {
             'message': 'User created succesfully',
-            'token': access_token,
-            #'refresh_token': refresh_token
         }
     ), 201

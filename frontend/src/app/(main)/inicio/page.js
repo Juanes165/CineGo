@@ -16,8 +16,6 @@ export default function AdminPage() {
         .catch(error => console.error(error));
     }, [search]);
 
-    console.log(allMovies);
-
     return (
         <div className="container mx-auto py-4">
             <h1 className="text-3xl font-bold text-center mb-8">Listado de películas</h1>
@@ -34,7 +32,7 @@ export default function AdminPage() {
             />
             <div className="flex justify-center flex-wrap px-4 gap-6">
                 {allMovies.map((movie, index) => (
-                    <Link href={`/home/peliculas/${movie.id}`} key={index}>
+                    <Link href={`/inicio/peliculas/${movie.id}`} key={index}>
                         <MovieCard movie={movie} />
                     </Link>
                 ))}

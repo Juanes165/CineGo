@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState, createContext } from "react";
-// import { parseJwt } from "@/utils";
+import { parseJwt } from "@/utils/parseJwt";
 
 export const AuthContext = createContext();
 
@@ -17,10 +17,12 @@ export function AuthContextProvider({ children }) {
             return;
         }
         try {
-            console.log(token)
+            parseJwt(token);
+            setUser(parseJwt(token).sub);
         }
         catch (error) {
-            console.log(error)
+            window.localStorage.removeItem('token');
+            setUser(null);
         }
     }, [token]);
 
@@ -30,6 +32,7 @@ export function AuthContextProvider({ children }) {
                 user,
                 token,
                 setToken,
+                setUser
             }}
         >
             {children}

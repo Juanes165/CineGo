@@ -3,6 +3,17 @@ import axios from "axios";
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function signUp(data) {
+    /*
+     * function to sign up
+     *
+     * @param {Object} data
+     * @param {string} data.email
+     * @param {string} data.password
+     * @param {string} data.name
+     * @param {string} data.lastName
+     * @returns {Object} - Response data
+     * @throws {Error} - Error message
+     */
     
     return axios.post(`${API_URL}/auth/register`,
         data,

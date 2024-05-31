@@ -3,9 +3,8 @@ import { useContext, useCallback, useState } from "react";
 import { signInService, signUpService } from "@/services";
 
 export const useAuth = () => {
-    const { token, setToken, user } = useContext(AuthContext);
+    const { token, setToken, user, setUser } = useContext(AuthContext);
     const [ status, setStatus ] = useState({ loading: false, error: null });
-
 
     const signIn = useCallback(async (email, password) => {
         setStatus({ loading: true, error: null });
@@ -36,10 +35,12 @@ export const useAuth = () => {
     const signOut = useCallback(() => {
         window.localStorage.removeItem('token');
         setToken(null);
+        setUser(null)
     }, [setToken]);
 
     return {
         user: {...user},
+        isAdmin: user?.is_admin,
         isLogged: Boolean(token),
         isLoading: status.loading,
         error: status.error,
