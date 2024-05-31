@@ -1,9 +1,11 @@
 from flask import Blueprint, jsonify, request
+from flask_cors import cross_origin
 from src.models.Sale import Sale
 
 sale_bp = Blueprint('sales', __name__, url_prefix='/sales')
 
 @sale_bp.get('/all')
+@cross_origin()
 def get_all_sales():
     """
     Get all sales from the database
@@ -23,6 +25,7 @@ def get_all_sales():
 
 
 @sale_bp.get('/<int:id>')
+@cross_origin()
 def get_sale(id):
     """
     Get a sale by id
@@ -54,6 +57,7 @@ def get_sale(id):
 
 
 @sale_bp.post('/create')
+@cross_origin()
 def create_sale():
     """
     Create a new sale in the database
@@ -106,6 +110,7 @@ def create_sale():
 
 
 @sale_bp.get('/user/<int:id>')
+@cross_origin()
 def get_user_sales(id):
     """
     Get all sales from a user
@@ -137,6 +142,7 @@ def get_user_sales(id):
 
 
 @sale_bp.get('/movie/<int:id>')
+@cross_origin()
 def get_movie_sales(id):
     """
     Get all sales from a movie
@@ -168,6 +174,7 @@ def get_movie_sales(id):
 
 
 @sale_bp.put('/<int:id>/update')
+@cross_origin()
 def update_sale(id):
     """
     Update a sale by id

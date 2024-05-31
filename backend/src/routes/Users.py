@@ -1,9 +1,11 @@
 from flask import Blueprint, jsonify, request
+from flask_cors import cross_origin
 from src.models.User import User
 
 user_bp = Blueprint('users', __name__, url_prefix='/users')
 
 @user_bp.get('/all')
+@cross_origin()
 def get_all_users():
     """
     Get all users from the database
@@ -23,6 +25,7 @@ def get_all_users():
 
 
 @user_bp.get('/<int:id>')
+@cross_origin()
 def get_user(id):
     """
     Get a user by id
@@ -54,6 +57,7 @@ def get_user(id):
 
 
 @user_bp.patch('toggleactive/<int:id>')
+@cross_origin()
 def toggle_active(id):
     """
     Toggle user active status

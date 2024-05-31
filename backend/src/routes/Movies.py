@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify, request
+from flask_cors import cross_origin
 from src.models.Movie import Movie
 from src.services.StorageService import StorageService
 import time
@@ -6,6 +7,7 @@ import time
 movies_bp = Blueprint('movies', __name__, url_prefix='/movies')
 
 @movies_bp.post('/')
+@cross_origin()
 def create_movie():
     """
     Create a new movie
@@ -79,6 +81,7 @@ def create_movie():
 
 
 @movies_bp.get('/search/')
+@cross_origin()
 def get_movies():
     """
     Get all movies
@@ -97,6 +100,7 @@ def get_movies():
 
 
 @movies_bp.get('/search/<string:query>')
+@cross_origin()
 def search_movies(query):
     """
     Search movies by title
@@ -123,6 +127,7 @@ def search_movies(query):
 
 
 @movies_bp.get('/all')
+@cross_origin()
 def get_all_movies():
     """
     Get all movies (including inactive)
@@ -141,6 +146,7 @@ def get_all_movies():
 
 
 @movies_bp.get('/<int:id>')
+@cross_origin()
 def get_movie(id):
     """
     Get a movie by id
@@ -170,6 +176,7 @@ def get_movie(id):
 
 
 @movies_bp.patch('/update/<int:id>')
+@cross_origin()
 def change_movie_basic_info(id):
     """
     Change basic info of a movie by id
@@ -234,6 +241,7 @@ def change_movie_basic_info(id):
 
 
 @movies_bp.post('/update/image/<int:id>')
+@cross_origin()
 def change_movie_image(id):
     """
     Change image of a movie by id
@@ -300,6 +308,7 @@ def change_movie_image(id):
 
 
 @movies_bp.patch('/toggle/<int:id>')
+@cross_origin()
 def toggle_movie(id):
     """
     Deactivate a movie by id
@@ -336,6 +345,7 @@ def toggle_movie(id):
 
 
 @movies_bp.delete('/<int:id>')
+@cross_origin()
 def delete_movie(id):
     """
     Delete a movie by id

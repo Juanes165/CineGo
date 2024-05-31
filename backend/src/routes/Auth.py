@@ -1,10 +1,12 @@
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import create_access_token, create_refresh_token
+from flask_cors import cross_origin
 from src.models.User import User
 
 auth_bp = Blueprint('auth', __name__,url_prefix='/auth')
 
 @auth_bp.post('/register')
+@cross_origin()
 def register_user():
     """
     Register a new user in the database
@@ -78,6 +80,7 @@ def register_user():
 
 
 @auth_bp.post('/login')
+@cross_origin()
 def login_user():
     """
     Log in a user and return a JWT token
@@ -108,6 +111,7 @@ def login_user():
 
 
 @auth_bp.post('/admin/register')
+@cross_origin()
 def register_user_admin():
     """
     Register a new user in the database

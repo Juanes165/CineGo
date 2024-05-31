@@ -1,5 +1,5 @@
 from flask import Flask, jsonify
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 from extensions import db, jwt, getconn
 from src.routes import Auth, Movies, Users, Sales
 from dotenv import load_dotenv
@@ -36,7 +36,22 @@ def health():
     return 'OK'
 
 
+@app.route('/json')
+def json():
+    return jsonify({'message': 'Hello, World!'})
+
+
+@app.route('/health/db')
+def health_db():
+    try:
+        db.session.execute('SELECT 1')
+        return {'status': 'OK'}
+    except Exception as e:
+        return str(e)
+
+
 @app.route('/movies/get')
+@cross_origin()
 def get_movies_eg():
     movies = Movie.query.all()
     return jsonify([movie.to_dict() for movie in movies])
