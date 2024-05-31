@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app, origins='*')
+CORS(app)
 
 app.config.from_prefixed_env()
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+pg8000://'

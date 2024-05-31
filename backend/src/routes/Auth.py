@@ -65,13 +65,15 @@ def register_user():
     access_token = create_access_token(identity={ 'id': new_user.id, 'is_admin': new_user.is_admin })
     #refresh_token = create_refresh_token(identity=new_user.id)
 
-    return jsonify(
+    response = jsonify(
         {
             'message': 'User created succesfully',
             'token': access_token,
             #'refresh_token': refresh_token
         }
-    ), 201
+    )
+    response.status_code = 201
+    response.headers.add('Access-Control-Allow-Origin', '*')
 
 
 @auth_bp.post('/login')
@@ -92,13 +94,15 @@ def login_user():
     access_token = create_access_token(identity={ 'id': user.id, 'is_admin': user.is_admin })
     #refresh_token = create_refresh_token(identity=user.id)
 
-    return jsonify(
+    response = jsonify(
         {
-            'message': 'Logged In Succesfully',
+            'message': 'User logged in succesfully',
             'token': access_token,
             #'refresh_token': refresh_token
         }
-    ), 200
+    )
+    response.status_code = 200
+    response.headers.add('Access-Control-Allow-Origin', '*')
 
 
 @auth_bp.post('/admin/register')
@@ -161,8 +165,10 @@ def register_user_admin():
         return jsonify({'message': 'Internal server error'}), 500
     
 
-    return jsonify(
+    response = jsonify(
         {
             'message': 'User created succesfully',
         }
-    ), 201
+    )
+    response.status_code = 201
+    response.headers.add('Access-Control-Allow-Origin', '*')
