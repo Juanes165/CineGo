@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request
 from src.models.User import User
 
-user_bp = Blueprint('users', __name__)
+user_bp = Blueprint('users', __name__, url_prefix='/users')
 
 @user_bp.get('/all')
 def get_all_users():

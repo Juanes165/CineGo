@@ -3,7 +3,7 @@ from src.models.Movie import Movie
 from src.services.StorageService import StorageService
 import time
 
-movies_bp = Blueprint('movies', __name__)
+movies_bp = Blueprint('movies', __name__, url_prefix='/movies')
 
 @movies_bp.post('/')
 def create_movie():

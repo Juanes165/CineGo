@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request
 from src.models.Sale import Sale
 
-sale_bp = Blueprint('sales', __name__)
+sale_bp = Blueprint('sales', __name__, url_prefix='/sales')
 
 @sale_bp.get('/all')
 def get_all_sales():
