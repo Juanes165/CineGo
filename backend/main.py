@@ -1,8 +1,9 @@
-from flask import Flask
+from flask import Flask, jsonify
 from flask_cors import CORS
 from extensions import db, jwt, getconn
 from src.routes import Auth, Movies, Users, Sales
 from dotenv import load_dotenv
+from src.models.Movie import Movie
 
 load_dotenv()
 
@@ -28,6 +29,17 @@ app.register_blueprint(Sales.sale_bp)
 @app.route('/')
 def index():
     return 'Welcome to the CineGo API'
+
+
+@app.route('/health')
+def health():
+    return 'OK'
+
+
+@app.route('/movies/get')
+def get_movies_eg():
+    movies = Movie.query.all()
+    return jsonify([movie.to_dict() for movie in movies])
 
 
 if __name__ == '__main__':
