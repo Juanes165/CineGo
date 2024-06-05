@@ -17,7 +17,7 @@ export default function Header() {
             <nav className="mr-10 flex flex-row items-center w-fit">
                 {user && user.is_admin && (
                     <div>
-                        <Link href={'/admin'} className="mr-3 text-xl hidden md:inline-block text-white">Inicio</Link>
+                        <Link href={'/admin'} className="mr-3 text-xl hidden md:inline-block text-white">Panel Admin</Link>
                         <Link href={'/admin/usuarios'} className="mr-3 text-xl hidden md:inline-block text-white">Usuarios</Link>
                         <Link href={'/admin/usuarios/registrar'} className="mr-3 text-xl hidden md:inline-block text-white">Registrar Admin</Link>
                         <Link href={'/admin/peliculas/crear'} className="mr-3 text-xl hidden md:inline-block text-white">Añadir película</Link>

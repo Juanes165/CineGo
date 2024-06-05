@@ -4,14 +4,22 @@ import { useAuth } from "@/hooks/useAuth";
 
 export default function AdminLayout({ children }) {
 
-    const { user } = useAuth();
+    const { isLogged, isAdmin } = useAuth();
 
-    if (!user) {
-        redirect('/login');
+    console.log(isLogged, isAdmin);
+
+
+
+    if (isAdmin === undefined || isLogged === undefined) {
+        return <div>Cargando...</div>
     }
-    if (!user.is_admin) {
 
-        redirect('/inicio');
+    if (!isLogged) {
+        return redirect('/ingreso');
+    }
+
+    if (!isAdmin) {
+        return redirect('/inicio');
     }
 
     return (
